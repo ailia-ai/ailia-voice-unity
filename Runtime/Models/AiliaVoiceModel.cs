@@ -211,6 +211,162 @@ public class AiliaVoiceModel : IDisposable
 		return true;
 	}
 
+	/**
+	* \~japanese
+	* @brief GPT-SoVITS v3モデルを指定します。
+	* @param encoder onnxファイルのパス名
+	* @param decoder1 onnxファイルのパス名
+	* @param decoder2 onnxファイルのパス名
+	* @param ssl onnxファイルのパス名
+	* @param vq onnxファイルのパス名
+	* @param cfm onnxファイルのパス名
+	* @param bigvgan onnxファイルのパス名
+	* @return
+	*   成功した場合はtrue、失敗した場合はfalseを返す。
+	*
+	* \~english
+	* @brief Open GPT-SoVITS v3 model.
+	* @param encoder The path name to the onnx file
+	* @param decoder1 The path name to the onnx file
+	* @param decoder2 The path name to the onnx file
+	* @param ssl The path name to the onnx file
+	* @param vq The path name to the onnx file
+	* @param cfm The path name to the onnx file
+	* @param bigvgan The path name to the onnx file
+	* @return
+	*   If this function is successful, it returns  true  , or  false  otherwise.
+	*/
+	public bool OpenModelGPTSoVITSV3(string encoder, string decoder1, string decoder2, string ssl, string vq, string cfm, string bigvgan){
+		AiliaLicense.CheckAndDownloadLicense();
+
+		int status = AiliaVoice.ailiaVoiceOpenModelFileGPTSoVITSV3(net, encoder, decoder1, decoder2, ssl, vq, cfm, bigvgan);
+		if (status != 0){
+			if (debug_log){
+				Debug.Log("ailiaVoiceOpenModelFileGPTSoVITSV3 failed " + status);
+			}
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	* \~japanese
+	* @brief GPT-SoVITS V2-Proモデルを指定します。
+	* @param encoder onnxファイルのパス名
+	* @param decoder1 onnxファイルのパス名
+	* @param decoder2 onnxファイルのパス名
+	* @param ssl onnxファイルのパス名
+	* @param vits onnxファイルのパス名
+	* @param sv onnxファイルのパス名
+	* @return
+	*   成功した場合はtrue、失敗した場合はfalseを返す。
+	*
+	* \~english
+	* @brief Open GPT-SoVITS V2-Pro model.
+	* @param encoder The path name to the onnx file
+	* @param decoder1 The path name to the onnx file
+	* @param decoder2 The path name to the onnx file
+	* @param ssl The path name to the onnx file
+	* @param vits The path name to the onnx file
+	* @param sv The path name to the onnx file
+	* @return
+	*   If this function is successful, it returns  true  , or  false  otherwise.
+	*/
+	public bool OpenModelGPTSoVITSV2Pro(string encoder, string decoder1, string decoder2, string ssl, string vits, string sv){
+		AiliaLicense.CheckAndDownloadLicense();
+
+		int status = AiliaVoice.ailiaVoiceOpenModelFileGPTSoVITSV2Pro(net, encoder, decoder1, decoder2, ssl, vits, sv);
+		if (status != 0){
+			if (debug_log){
+				Debug.Log("ailiaVoiceOpenModelFileGPTSoVITSV2Pro failed " + status);
+			}
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	* \~japanese
+	* @brief CFMのサンプリングステップ数を設定します。
+	* @param steps サンプリングステップ数
+	* @return
+	*   成功した場合はtrue、失敗した場合はfalseを返す。
+	*
+	* \~english
+	* @brief Set CFM sampling steps.
+	* @param steps Number of sampling steps
+	* @return
+	*   If this function is successful, it returns  true  , or  false  otherwise.
+	*/
+	public bool SetSampleSteps(int steps){
+		int status = AiliaVoice.ailiaVoiceSetSampleSteps(net, steps);
+		if (status != 0){
+			if (debug_log){
+				Debug.Log("ailiaVoiceSetSampleSteps failed " + status);
+			}
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	* \~japanese
+	* @brief 音声合成の速度を設定します。
+	* @param speed 速度(デフォルト1.0、0より大きい値)
+	* @return
+	*   成功した場合はtrue、失敗した場合はfalseを返す。
+	* @details
+	*   GPT-SoVITS V2およびV3で使用できます。V1では無効です。
+	*
+	* \~english
+	* @brief Set the speech speed for synthesis.
+	* @param speed Speed value (default 1.0, must be greater than 0)
+	* @return
+	*   If this function is successful, it returns  true  , or  false  otherwise.
+	* @details
+	*   Supported by GPT-SoVITS V2 and V3. Not effective for V1.
+	*/
+	public bool SetSpeed(float speed){
+		int status = AiliaVoice.ailiaVoiceSetSpeed(net, speed);
+		if (status != 0){
+			if (debug_log){
+				Debug.Log("ailiaVoiceSetSpeed failed " + status);
+			}
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	* \~japanese
+	* @brief G2Pで使用するモデルタイプを設定します。
+	* @param model_type AILIA_VOICE_MODEL_TYPE_*
+	* @return
+	*   成功した場合はtrue、失敗した場合はfalseを返す。
+	* @details
+	*   G2Pを単独で使用する際に、モデルファイルを与えずにモデルタイプを設定します。
+	*   OpenModelやOpenModelGPTSoVITSV3を呼び出した場合は自動的に設定されます。
+	*
+	* \~english
+	* @brief Set the model type for G2P processing.
+	* @param model_type AILIA_VOICE_MODEL_TYPE_*
+	* @return
+	*   If this function is successful, it returns  true  , or  false  otherwise.
+	* @details
+	*   Sets the model type when using G2P standalone without loading model files.
+	*   Automatically set when OpenModel or OpenModelGPTSoVITSV3 is called.
+	*/
+	public bool SetModelType(int model_type){
+		int status = AiliaVoice.ailiaVoiceSetModelType(net, model_type);
+		if (status != 0){
+			if (debug_log){
+				Debug.Log("ailiaVoiceSetModelType failed " + status);
+			}
+			return false;
+		}
+		return true;
+	}
+
 	/****************************************************************
 	 * 開放する
 	 */
