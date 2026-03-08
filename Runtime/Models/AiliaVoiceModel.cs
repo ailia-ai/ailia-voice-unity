@@ -213,7 +213,113 @@ public class AiliaVoiceModel : IDisposable
 
 	/**
 	* \~japanese
-	* @brief GPT-SoVITS v3モデルを指定します。
+	* @brief Tacotron2モデルを指定します。
+	* @param encoder onnxファイルのパス名
+	* @param decoder1 onnxファイルのパス名
+	* @param decoder2 onnxファイルのパス名
+	* @param wave onnxファイルのパス名
+	* @param cleaner_type AILIA_VOICE_CLEANER_TYPE_*
+	* @return
+	*   成功した場合はtrue、失敗した場合はfalseを返す。
+	*
+	* \~english
+	* @brief Open Tacotron2 model.
+	* @param encoder The path name to the onnx file
+	* @param decoder1 The path name to the onnx file
+	* @param decoder2 The path name to the onnx file
+	* @param wave The path name to the onnx file
+	* @param cleaner_type AILIA_VOICE_CLEANER_TYPE_*
+	* @return
+	*   If this function is successful, it returns  true  , or  false  otherwise.
+	*/
+	public bool OpenTacotron2ModelFile(string encoder, string decoder1, string decoder2, string wave, int cleaner_type){
+		AiliaLicense.CheckAndDownloadLicense();
+
+		int status = AiliaVoice.ailiaVoiceOpenTacotron2ModelFile(net, encoder, decoder1, decoder2, wave, cleaner_type);
+		if (status != 0){
+			if (debug_log){
+				Debug.Log("ailiaVoiceOpenTacotron2ModelFile failed " + status);
+			}
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	* \~japanese
+	* @brief GPT-SoVITS V1モデルを指定します。
+	* @param encoder onnxファイルのパス名
+	* @param decoder1 onnxファイルのパス名
+	* @param decoder2 onnxファイルのパス名
+	* @param wave onnxファイルのパス名
+	* @param ssl onnxファイルのパス名
+	* @return
+	*   成功した場合はtrue、失敗した場合はfalseを返す。
+	*
+	* \~english
+	* @brief Open GPT-SoVITS V1 model.
+	* @param encoder The path name to the onnx file
+	* @param decoder1 The path name to the onnx file
+	* @param decoder2 The path name to the onnx file
+	* @param wave The path name to the onnx file
+	* @param ssl The path name to the onnx file
+	* @return
+	*   If this function is successful, it returns  true  , or  false  otherwise.
+	*/
+	public bool OpenGPTSoVITSV1ModelFile(string encoder, string decoder1, string decoder2, string wave, string ssl){
+		AiliaLicense.CheckAndDownloadLicense();
+
+		int status = AiliaVoice.ailiaVoiceOpenGPTSoVITSV1ModelFile(net, encoder, decoder1, decoder2, wave, ssl);
+		if (status != 0){
+			if (debug_log){
+				Debug.Log("ailiaVoiceOpenGPTSoVITSV1ModelFile failed " + status);
+			}
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	* \~japanese
+	* @brief GPT-SoVITS V2モデルを指定します。
+	* @param encoder onnxファイルのパス名
+	* @param decoder1 onnxファイルのパス名
+	* @param decoder2 onnxファイルのパス名
+	* @param wave onnxファイルのパス名
+	* @param ssl onnxファイルのパス名
+	* @param chinese_bert chinese-roberta.onnxファイルのパス名（nullの場合、中国語BERTを使用しない）
+	* @param vocab vocab.txtファイルのパス名（nullの場合、中国語BERTを使用しない）
+	* @return
+	*   成功した場合はtrue、失敗した場合はfalseを返す。
+	*
+	* \~english
+	* @brief Open GPT-SoVITS V2 model.
+	* @param encoder The path name to the onnx file
+	* @param decoder1 The path name to the onnx file
+	* @param decoder2 The path name to the onnx file
+	* @param wave The path name to the onnx file
+	* @param ssl The path name to the onnx file
+	* @param chinese_bert The path name to the chinese-roberta.onnx file (null to disable Chinese BERT)
+	* @param vocab The path name to the vocab.txt file (null to disable Chinese BERT)
+	* @return
+	*   If this function is successful, it returns  true  , or  false  otherwise.
+	*/
+	public bool OpenGPTSoVITSV2ModelFile(string encoder, string decoder1, string decoder2, string wave, string ssl, string chinese_bert, string vocab){
+		AiliaLicense.CheckAndDownloadLicense();
+
+		int status = AiliaVoice.ailiaVoiceOpenGPTSoVITSV2ModelFile(net, encoder, decoder1, decoder2, wave, ssl, chinese_bert, vocab);
+		if (status != 0){
+			if (debug_log){
+				Debug.Log("ailiaVoiceOpenGPTSoVITSV2ModelFile failed " + status);
+			}
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	* \~japanese
+	* @brief GPT-SoVITS V3モデルを指定します。
 	* @param encoder onnxファイルのパス名
 	* @param decoder1 onnxファイルのパス名
 	* @param decoder2 onnxファイルのパス名
@@ -221,11 +327,13 @@ public class AiliaVoiceModel : IDisposable
 	* @param vq onnxファイルのパス名
 	* @param cfm onnxファイルのパス名
 	* @param bigvgan onnxファイルのパス名
+	* @param chinese_bert chinese-roberta.onnxファイルのパス名（nullの場合、中国語BERTを使用しない）
+	* @param vocab vocab.txtファイルのパス名（nullの場合、中国語BERTを使用しない）
 	* @return
 	*   成功した場合はtrue、失敗した場合はfalseを返す。
 	*
 	* \~english
-	* @brief Open GPT-SoVITS v3 model.
+	* @brief Open GPT-SoVITS V3 model.
 	* @param encoder The path name to the onnx file
 	* @param decoder1 The path name to the onnx file
 	* @param decoder2 The path name to the onnx file
@@ -233,16 +341,18 @@ public class AiliaVoiceModel : IDisposable
 	* @param vq The path name to the onnx file
 	* @param cfm The path name to the onnx file
 	* @param bigvgan The path name to the onnx file
+	* @param chinese_bert The path name to the chinese-roberta.onnx file (null to disable Chinese BERT)
+	* @param vocab The path name to the vocab.txt file (null to disable Chinese BERT)
 	* @return
 	*   If this function is successful, it returns  true  , or  false  otherwise.
 	*/
-	public bool OpenModelGPTSoVITSV3(string encoder, string decoder1, string decoder2, string ssl, string vq, string cfm, string bigvgan){
+	public bool OpenGPTSoVITSV3ModelFile(string encoder, string decoder1, string decoder2, string ssl, string vq, string cfm, string bigvgan, string chinese_bert, string vocab){
 		AiliaLicense.CheckAndDownloadLicense();
 
-		int status = AiliaVoice.ailiaVoiceOpenModelFileGPTSoVITSV3(net, encoder, decoder1, decoder2, ssl, vq, cfm, bigvgan);
+		int status = AiliaVoice.ailiaVoiceOpenGPTSoVITSV3ModelFile(net, encoder, decoder1, decoder2, ssl, vq, cfm, bigvgan, chinese_bert, vocab);
 		if (status != 0){
 			if (debug_log){
-				Debug.Log("ailiaVoiceOpenModelFileGPTSoVITSV3 failed " + status);
+				Debug.Log("ailiaVoiceOpenGPTSoVITSV3ModelFile failed " + status);
 			}
 			return false;
 		}
@@ -258,6 +368,8 @@ public class AiliaVoiceModel : IDisposable
 	* @param ssl onnxファイルのパス名
 	* @param vits onnxファイルのパス名
 	* @param sv onnxファイルのパス名
+	* @param chinese_bert chinese-roberta.onnxファイルのパス名（nullの場合、中国語BERTを使用しない）
+	* @param vocab vocab.txtファイルのパス名（nullの場合、中国語BERTを使用しない）
 	* @return
 	*   成功した場合はtrue、失敗した場合はfalseを返す。
 	*
@@ -269,16 +381,18 @@ public class AiliaVoiceModel : IDisposable
 	* @param ssl The path name to the onnx file
 	* @param vits The path name to the onnx file
 	* @param sv The path name to the onnx file
+	* @param chinese_bert The path name to the chinese-roberta.onnx file (null to disable Chinese BERT)
+	* @param vocab The path name to the vocab.txt file (null to disable Chinese BERT)
 	* @return
 	*   If this function is successful, it returns  true  , or  false  otherwise.
 	*/
-	public bool OpenModelGPTSoVITSV2Pro(string encoder, string decoder1, string decoder2, string ssl, string vits, string sv){
+	public bool OpenGPTSoVITSV2ProModelFile(string encoder, string decoder1, string decoder2, string ssl, string vits, string sv, string chinese_bert, string vocab){
 		AiliaLicense.CheckAndDownloadLicense();
 
-		int status = AiliaVoice.ailiaVoiceOpenModelFileGPTSoVITSV2Pro(net, encoder, decoder1, decoder2, ssl, vits, sv);
+		int status = AiliaVoice.ailiaVoiceOpenGPTSoVITSV2ProModelFile(net, encoder, decoder1, decoder2, ssl, vits, sv, chinese_bert, vocab);
 		if (status != 0){
 			if (debug_log){
-				Debug.Log("ailiaVoiceOpenModelFileGPTSoVITSV2Pro failed " + status);
+				Debug.Log("ailiaVoiceOpenGPTSoVITSV2ProModelFile failed " + status);
 			}
 			return false;
 		}
@@ -345,7 +459,7 @@ public class AiliaVoiceModel : IDisposable
 	*   成功した場合はtrue、失敗した場合はfalseを返す。
 	* @details
 	*   G2Pを単独で使用する際に、モデルファイルを与えずにモデルタイプを設定します。
-	*   OpenModelやOpenModelGPTSoVITSV3を呼び出した場合は自動的に設定されます。
+	*   OpenModelやOpenGPTSoVITSV3ModelFileを呼び出した場合は自動的に設定されます。
 	*
 	* \~english
 	* @brief Set the model type for G2P processing.
@@ -354,7 +468,7 @@ public class AiliaVoiceModel : IDisposable
 	*   If this function is successful, it returns  true  , or  false  otherwise.
 	* @details
 	*   Sets the model type when using G2P standalone without loading model files.
-	*   Automatically set when OpenModel or OpenModelGPTSoVITSV3 is called.
+	*   Automatically set when OpenModel or OpenGPTSoVITSV3ModelFile is called.
 	*/
 	public bool SetModelType(int model_type){
 		int status = AiliaVoice.ailiaVoiceSetModelType(net, model_type);

@@ -609,11 +609,35 @@ public class AiliaVoice
 	*   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
 	*/
 #if (UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN)
-	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenModelFileGPTSoVITSV3W", CharSet=CharSet.Unicode)]
-	public static extern int ailiaVoiceOpenModelFileGPTSoVITSV3(IntPtr net, string encoder, string decoder1, string decoder2, string ssl, string vq, string cfm, string bigvgan);
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenTacotron2ModelFileW", CharSet=CharSet.Unicode)]
+	public static extern int ailiaVoiceOpenTacotron2ModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string wave, int cleaner_type);
 #else
-	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenModelFileGPTSoVITSV3A", CharSet=CharSet.Ansi)]
-	public static extern int ailiaVoiceOpenModelFileGPTSoVITSV3(IntPtr net, string encoder, string decoder1, string decoder2, string ssl, string vq, string cfm, string bigvgan);
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenTacotron2ModelFileA", CharSet=CharSet.Ansi)]
+	public static extern int ailiaVoiceOpenTacotron2ModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string wave, int cleaner_type);
+#endif
+
+#if (UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN)
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenGPTSoVITSV1ModelFileW", CharSet=CharSet.Unicode)]
+	public static extern int ailiaVoiceOpenGPTSoVITSV1ModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string wave, string ssl);
+#else
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenGPTSoVITSV1ModelFileA", CharSet=CharSet.Ansi)]
+	public static extern int ailiaVoiceOpenGPTSoVITSV1ModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string wave, string ssl);
+#endif
+
+#if (UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN)
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenGPTSoVITSV2ModelFileW", CharSet=CharSet.Unicode)]
+	public static extern int ailiaVoiceOpenGPTSoVITSV2ModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string wave, string ssl, string chinese_bert, string vocab);
+#else
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenGPTSoVITSV2ModelFileA", CharSet=CharSet.Ansi)]
+	public static extern int ailiaVoiceOpenGPTSoVITSV2ModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string wave, string ssl, string chinese_bert, string vocab);
+#endif
+
+#if (UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN)
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenGPTSoVITSV3ModelFileW", CharSet=CharSet.Unicode)]
+	public static extern int ailiaVoiceOpenGPTSoVITSV3ModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string ssl, string vq, string cfm, string bigvgan, string chinese_bert, string vocab);
+#else
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenGPTSoVITSV3ModelFileA", CharSet=CharSet.Ansi)]
+	public static extern int ailiaVoiceOpenGPTSoVITSV3ModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string ssl, string vq, string cfm, string bigvgan, string chinese_bert, string vocab);
 #endif
 
 	/**
@@ -626,6 +650,7 @@ public class AiliaVoice
 	* @param ssl onnxファイルのパス名 (cnhubert.onnx)
 	* @param vits onnxファイルのパス名 (vits.onnx)
 	* @param sv onnxファイルのパス名 (sv.onnx)
+	* @param chinese_bert chinese-roberta.onnxとvocab.txtを含むフォルダのパス名 (NULLの場合はBERTを使用しない)
 	* @return
 	*   成功した場合は \ref AILIA_STATUS_SUCCESS 、そうでなければエラーコードを返す。
 	*
@@ -638,15 +663,16 @@ public class AiliaVoice
 	* @param ssl The path name to the onnx file (cnhubert.onnx)
 	* @param vits The path name to the onnx file (vits.onnx)
 	* @param sv The path name to the onnx file (sv.onnx)
+	* @param chinese_bert The path to the folder containing chinese-roberta.onnx and vocab.txt (NULL to disable BERT)
 	* @return
 	*   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
 	*/
 #if (UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN)
-	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenModelFileGPTSoVITSV2ProW", CharSet=CharSet.Unicode)]
-	public static extern int ailiaVoiceOpenModelFileGPTSoVITSV2Pro(IntPtr net, string encoder, string decoder1, string decoder2, string ssl, string vits, string sv);
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenGPTSoVITSV2ProModelFileW", CharSet=CharSet.Unicode)]
+	public static extern int ailiaVoiceOpenGPTSoVITSV2ProModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string ssl, string vits, string sv, string chinese_bert, string vocab);
 #else
-	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenModelFileGPTSoVITSV2ProA", CharSet=CharSet.Ansi)]
-	public static extern int ailiaVoiceOpenModelFileGPTSoVITSV2Pro(IntPtr net, string encoder, string decoder1, string decoder2, string ssl, string vits, string sv);
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenGPTSoVITSV2ProModelFileA", CharSet=CharSet.Ansi)]
+	public static extern int ailiaVoiceOpenGPTSoVITSV2ProModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string ssl, string vits, string sv, string chinese_bert, string vocab);
 #endif
 
 	/**
@@ -698,7 +724,7 @@ public class AiliaVoice
 	*   成功した場合は \ref AILIA_STATUS_SUCCESS 、そうでなければエラーコードを返す。
 	* @details
 	*   G2Pを単独で使用する際に、モデルファイルを与えずにモデルタイプを設定します。
-	*   ailiaVoiceOpenModelFileAやailiaVoiceOpenModelFileGPTSoVITSV3Aを呼び出した場合は自動的に設定されます。
+	*   ailiaVoiceOpenModelFileAやailiaVoiceOpenGPTSoVITSV3ModelFileAを呼び出した場合は自動的に設定されます。
 	*
 	* \~english
 	* @brief Set the model type for G2P processing.
@@ -708,7 +734,7 @@ public class AiliaVoice
 	*   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
 	* @details
 	*   Sets the model type when using G2P standalone without loading model files.
-	*   Automatically set when ailiaVoiceOpenModelFileA or ailiaVoiceOpenModelFileGPTSoVITSV3A is called.
+	*   Automatically set when ailiaVoiceOpenModelFileA or ailiaVoiceOpenGPTSoVITSV3ModelFileA is called.
 	*/
 	[DllImport(LIBRARY_NAME)]
 	public static extern int ailiaVoiceSetModelType(IntPtr net, int model_type);
