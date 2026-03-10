@@ -578,7 +578,7 @@ public class AiliaVoiceModel : IDisposable
 			}
 			return "";
 		}
-		return System.Text.Encoding.UTF8.GetString(texts);
+		return System.Text.Encoding.UTF8.GetString(texts).TrimEnd('\0');
 	}
 
 	/**
@@ -604,7 +604,7 @@ public class AiliaVoiceModel : IDisposable
 		GCHandle audio_handle = GCHandle.Alloc(audio_data, GCHandleType.Pinned);
 		IntPtr audio_input = audio_handle.AddrOfPinnedObject();
 
-		byte[] text = System.Text.Encoding.UTF8.GetBytes(ref_text);
+		byte[] text = System.Text.Encoding.UTF8.GetBytes(ref_text+"\u0000");
 		GCHandle text_handle = GCHandle.Alloc(text, GCHandleType.Pinned);
 		IntPtr text_input = text_handle.AddrOfPinnedObject();
 		int status = AiliaVoice.ailiaVoiceSetReference(net, audio_input, (uint)(ref_audio.samples * ref_audio.channels * 4), (uint)(ref_audio.channels), (uint)(ref_audio.frequency), text_input);
@@ -636,7 +636,7 @@ public class AiliaVoiceModel : IDisposable
 	*/
 	public bool Inference(string feature)
 	{
-		byte[] text = System.Text.Encoding.UTF8.GetBytes(feature);
+		byte[] text = System.Text.Encoding.UTF8.GetBytes(feature+"\u0000");
 		GCHandle handle = GCHandle.Alloc(text, GCHandleType.Pinned);
 		IntPtr input = handle.AddrOfPinnedObject();
 		int status = AiliaVoice.ailiaVoiceInference(net, input);
