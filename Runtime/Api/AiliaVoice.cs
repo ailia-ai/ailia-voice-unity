@@ -51,6 +51,28 @@ public class AiliaVoice
 	*/
 	public const Int32 AILIA_VOICE_DICTIONARY_TYPE_G2P_EN = (1);
 
+	/**
+	* \~japanese
+	* @def AILIA_VOICE_DICTIONARY_TYPE_G2P_CN
+	* @brief G2P_CN形式
+	*
+	* \~english
+	* @def AILIA_VOICE_DICTIONARY_TYPE_G2P_CN
+	* @brief Format for G2P_CN
+	*/
+	public const Int32 AILIA_VOICE_DICTIONARY_TYPE_G2P_CN = (2);
+
+	/**
+	* \~japanese
+	* @def AILIA_VOICE_DICTIONARY_TYPE_G2PW
+	* @brief G2PW形式（中国語多音字対応）
+	*
+	* \~english
+	* @def AILIA_VOICE_DICTIONARY_TYPE_G2PW
+	* @brief Format for G2PW (Chinese polyphone disambiguation)
+	*/
+	public const Int32 AILIA_VOICE_DICTIONARY_TYPE_G2PW = (3);
+
 	/****************************************************************
 	* アルゴリズム定義
 	**/
@@ -76,6 +98,39 @@ public class AiliaVoice
 	* @brief Format for GPT-SoVITS
 	*/
 	public const Int32 AILIA_VOICE_MODEL_TYPE_GPT_SOVITS = (1);
+
+	/**
+	* \~japanese
+	* @def AILIA_VOICE_MODEL_TYPE_GPT_SOVITS_V2
+	* @brief GPT-SoVITS V2形式
+	*
+	* \~english
+	* @def AILIA_VOICE_MODEL_TYPE_GPT_SOVITS_V2
+	* @brief Format for GPT-SoVITS V2
+	*/
+	public const Int32 AILIA_VOICE_MODEL_TYPE_GPT_SOVITS_V2 = (2);
+
+	/**
+	* \~japanese
+	* @def AILIA_VOICE_MODEL_TYPE_GPT_SOVITS_V3
+	* @brief GPT-SoVITS v3形式
+	*
+	* \~english
+	* @def AILIA_VOICE_MODEL_TYPE_GPT_SOVITS_V3
+	* @brief Format for GPT-SoVITS v3
+	*/
+	public const Int32 AILIA_VOICE_MODEL_TYPE_GPT_SOVITS_V3 = (3);
+
+	/**
+	* \~japanese
+	* @def AILIA_VOICE_MODEL_TYPE_GPT_SOVITS_V2_PRO
+	* @brief GPT-SoVITS V2-Pro形式
+	*
+	* \~english
+	* @def AILIA_VOICE_MODEL_TYPE_GPT_SOVITS_V2_PRO
+	* @brief Format for GPT-SoVITS V2-Pro
+	*/
+	public const Int32 AILIA_VOICE_MODEL_TYPE_GPT_SOVITS_V2_PRO = (4);
 
 	/**
 	* \~japanese
@@ -140,6 +195,17 @@ public class AiliaVoice
 	*/
 	public const Int32 AILIA_VOICE_G2P_TYPE_GPT_SOVITS_JA = (2);
 
+	/**
+	* \~japanese
+	* @def AILIA_VOICE_G2P_TYPE_GPT_SOVITS_ZH
+	* @brief GPT_SOVITSの中国語向けの処理
+	*
+	* \~english
+	* @def AILIA_VOICE_G2P_TYPE_GPT_SOVITS_ZH
+	* @brief GPT SOVITS Chinese
+	*/
+	public const Int32 AILIA_VOICE_G2P_TYPE_GPT_SOVITS_ZH = (3);
+
 	// 互換性用
 	public const Int32 AILIA_VOICE_TEXT_POST_PROCESS_APPEND_PUNCTUATION = (2);
 
@@ -166,6 +232,9 @@ public class AiliaVoice
 	public delegate int ailiaCallbackGetOutputBlobCount(IntPtr a, IntPtr b);
 	public delegate IntPtr ailiaCallbackGetErrorDetail(IntPtr a);
 	public delegate int ailiaCallbackCopyBlobData(IntPtr a, uint b, IntPtr c, uint d);
+	public delegate int ailiaCallbackAudioGetFrameLen(IntPtr a, int b, int c, int d, int e);
+	public delegate int ailiaCallbackAudioGetSpectrogram(IntPtr a, IntPtr b, int c, int d, int e, int f, int g, int h, int i, float j, int k);
+	public delegate int ailiaCallbackAudioGetMelSpectrogram(IntPtr a, IntPtr b, int c, int d, int e, int f, int g, int h, int i, int j, float k, int l, float m, float n, int o, int p, int q);
 
 	/****************************************************************
 	 *  引数をスルーする系のAPIに変換
@@ -193,6 +262,12 @@ public class AiliaVoice
 	public static extern int ailiaAudioResample(IntPtr a, IntPtr b, int c, int d, int e, int f);
 	[DllImport(AiliaAudio.LIBRARY_NAME)]
 	public static extern int ailiaAudioGetResampleLen(IntPtr a, int b, int c, int d);
+	[DllImport(AiliaAudio.LIBRARY_NAME)]
+	public static extern int ailiaAudioGetFrameLen(IntPtr a, int b, int c, int d, int e);
+	[DllImport(AiliaAudio.LIBRARY_NAME)]
+	public static extern int ailiaAudioGetSpectrogram(IntPtr a, IntPtr b, int c, int d, int e, int f, int g, int h, int i, float j, int k);
+	[DllImport(AiliaAudio.LIBRARY_NAME)]
+	public static extern int ailiaAudioGetMelSpectrogram(IntPtr a, IntPtr b, int c, int d, int e, int f, int g, int h, int i, int j, float k, int l, float m, float n, int o, int p, int q);
 
 	/****************************************************************
 	 *  IL2CPP用
@@ -295,6 +370,21 @@ public class AiliaVoice
 		return Ailia.ailiaCopyBlobData(a, b, c, d);
 	}
 
+	[AOT.MonoPInvokeCallback(typeof(ailiaCallbackAudioGetFrameLen))]
+	public static int ailiaCallbackAudioGetFrameLenBridge (IntPtr a, int b, int c, int d, int e) {
+		return ailiaAudioGetFrameLen(a, b, c, d, e);
+	}
+
+	[AOT.MonoPInvokeCallback(typeof(ailiaCallbackAudioGetSpectrogram))]
+	public static int ailiaCallbackAudioGetSpectrogramBridge (IntPtr a, IntPtr b, int c, int d, int e, int f, int g, int h, int i, float j, int k) {
+		return ailiaAudioGetSpectrogram(a, b, c, d, e, f, g, h, i, j, k);
+	}
+
+	[AOT.MonoPInvokeCallback(typeof(ailiaCallbackAudioGetMelSpectrogram))]
+	public static int ailiaCallbackAudioGetMelSpectrogramBridge (IntPtr a, IntPtr b, int c, int d, int e, int f, int g, int h, int i, int j, float k, int l, float m, float n, int o, int p, int q) {
+		return ailiaAudioGetMelSpectrogram(a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q);
+	}
+
 	/**
 	* \~japanese
 	* @def AILIA_SPEECH_API_CALLBACK_VERSION
@@ -304,7 +394,7 @@ public class AiliaVoice
 	* @def AILIA_SPEECH_API_CALLBACK_VERSION
 	* @brief Struct version
 	*/
-	public const int AILIA_VOICE_API_CALLBACK_VERSION = (2);
+	public const int AILIA_VOICE_API_CALLBACK_VERSION = (3);
 
 	/* APIコールバック関数構造体 */
 	[StructLayout(LayoutKind.Sequential)]
@@ -312,6 +402,9 @@ public class AiliaVoice
 	{
 		public ailiaCallbackAudioResample ailiaAudioResample;
 		public ailiaCallbackAudioGetResampleLen ailiaAudioGetResampleLen;
+		public ailiaCallbackAudioGetFrameLen ailiaAudioGetFrameLen;
+		public ailiaCallbackAudioGetSpectrogram ailiaAudioGetSpectrogram;
+		public ailiaCallbackAudioGetMelSpectrogram ailiaAudioGetMelSpectrogram;
 
 		public ailiaCallbackCreate ailiaCreate;
 		public ailiaCallbackOpenWeightFileA ailiaOpenWeightFileA;
@@ -337,6 +430,9 @@ public class AiliaVoice
 
 		callback.ailiaAudioResample=ailiaCallbackAudioResampleBridge;
 		callback.ailiaAudioGetResampleLen=ailiaCallbackAudioGetResampleLenBridge;
+		callback.ailiaAudioGetFrameLen=ailiaCallbackAudioGetFrameLenBridge;
+		callback.ailiaAudioGetSpectrogram=ailiaCallbackAudioGetSpectrogramBridge;
+		callback.ailiaAudioGetMelSpectrogram=ailiaCallbackAudioGetMelSpectrogramBridge;
 		callback.ailiaCreate=ailiaCallbackCreateBridge;
 		callback.ailiaOpenWeightFileA=ailiaCallbackOpenWeightFileABridge;
 		callback.ailiaOpenWeightFileW=ailiaCallbackOpenWeightFileWBridge;
@@ -354,7 +450,7 @@ public class AiliaVoice
 		callback.ailiaGetOutputBlobCount=ailiaCallbackGetOutputBlobCountBridge;
 		callback.ailiaGetErrorDetail=ailiaCallbackGetErrorDetailBridge;
 		callback.ailiaCopyBlobData=ailiaCallbackCopyBlobDataBridge;
-		
+
 		return callback;
 	}
 
@@ -484,6 +580,164 @@ public class AiliaVoice
 	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenModelFileA", CharSet=CharSet.Ansi)]
 	public static extern int ailiaVoiceOpenModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string wave, string ssl, int model_type, int cleaner_type);
 #endif
+
+	/**
+	* \~japanese
+	* @brief GPT-SoVITS V3向けのモデルを指定します。
+	* @param net ネットワークオブジェクトポインタ
+	* @param encoder onnxファイルのパス名 (t2s_encoder.onnx)
+	* @param decoder1 onnxファイルのパス名 (t2s_fsdec.onnx)
+	* @param decoder2 onnxファイルのパス名 (t2s_sdec.onnx)
+	* @param ssl onnxファイルのパス名 (cnhubert.onnx)
+	* @param vq onnxファイルのパス名 (vq_model.onnx)
+	* @param cfm onnxファイルのパス名 (vq_cfm.onnx)
+	* @param bigvgan onnxファイルのパス名 (bigvgan_model.onnx)
+	* @return
+	*   成功した場合は \ref AILIA_STATUS_SUCCESS 、そうでなければエラーコードを返す。
+	*
+	* \~english
+	* @brief Set GPT-SoVITS V3 models into a network instance.
+	* @param net A network instance pointer
+	* @param encoder The path name to the onnx file (t2s_encoder.onnx)
+	* @param decoder1 The path name to the onnx file (t2s_fsdec.onnx)
+	* @param decoder2 The path name to the onnx file (t2s_sdec.onnx)
+	* @param ssl The path name to the onnx file (cnhubert.onnx)
+	* @param vq The path name to the onnx file (vq_model.onnx)
+	* @param cfm The path name to the onnx file (vq_cfm.onnx)
+	* @param bigvgan The path name to the onnx file (bigvgan_model.onnx)
+	* @return
+	*   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
+	*/
+#if (UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN)
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenTacotron2ModelFileW", CharSet=CharSet.Unicode)]
+	public static extern int ailiaVoiceOpenTacotron2ModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string wave, int cleaner_type);
+#else
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenTacotron2ModelFileA", CharSet=CharSet.Ansi)]
+	public static extern int ailiaVoiceOpenTacotron2ModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string wave, int cleaner_type);
+#endif
+
+#if (UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN)
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenGPTSoVITSV1ModelFileW", CharSet=CharSet.Unicode)]
+	public static extern int ailiaVoiceOpenGPTSoVITSV1ModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string wave, string ssl);
+#else
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenGPTSoVITSV1ModelFileA", CharSet=CharSet.Ansi)]
+	public static extern int ailiaVoiceOpenGPTSoVITSV1ModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string wave, string ssl);
+#endif
+
+#if (UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN)
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenGPTSoVITSV2ModelFileW", CharSet=CharSet.Unicode)]
+	public static extern int ailiaVoiceOpenGPTSoVITSV2ModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string wave, string ssl, string chinese_bert, string vocab);
+#else
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenGPTSoVITSV2ModelFileA", CharSet=CharSet.Ansi)]
+	public static extern int ailiaVoiceOpenGPTSoVITSV2ModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string wave, string ssl, string chinese_bert, string vocab);
+#endif
+
+#if (UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN)
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenGPTSoVITSV3ModelFileW", CharSet=CharSet.Unicode)]
+	public static extern int ailiaVoiceOpenGPTSoVITSV3ModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string ssl, string vq, string cfm, string bigvgan, string chinese_bert, string vocab);
+#else
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenGPTSoVITSV3ModelFileA", CharSet=CharSet.Ansi)]
+	public static extern int ailiaVoiceOpenGPTSoVITSV3ModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string ssl, string vq, string cfm, string bigvgan, string chinese_bert, string vocab);
+#endif
+
+	/**
+	* \~japanese
+	* @brief GPT-SoVITS V2-Pro向けのモデルを指定します。
+	* @param net ネットワークオブジェクトポインタ
+	* @param encoder onnxファイルのパス名 (t2s_encoder.onnx)
+	* @param decoder1 onnxファイルのパス名 (t2s_fsdec.onnx)
+	* @param decoder2 onnxファイルのパス名 (t2s_sdec.onnx)
+	* @param ssl onnxファイルのパス名 (cnhubert.onnx)
+	* @param vits onnxファイルのパス名 (vits.onnx)
+	* @param sv onnxファイルのパス名 (sv.onnx)
+	* @param chinese_bert chinese-roberta.onnxとvocab.txtを含むフォルダのパス名 (NULLの場合はBERTを使用しない)
+	* @return
+	*   成功した場合は \ref AILIA_STATUS_SUCCESS 、そうでなければエラーコードを返す。
+	*
+	* \~english
+	* @brief Set GPT-SoVITS V2-Pro models into a network instance.
+	* @param net A network instance pointer
+	* @param encoder The path name to the onnx file (t2s_encoder.onnx)
+	* @param decoder1 The path name to the onnx file (t2s_fsdec.onnx)
+	* @param decoder2 The path name to the onnx file (t2s_sdec.onnx)
+	* @param ssl The path name to the onnx file (cnhubert.onnx)
+	* @param vits The path name to the onnx file (vits.onnx)
+	* @param sv The path name to the onnx file (sv.onnx)
+	* @param chinese_bert The path to the folder containing chinese-roberta.onnx and vocab.txt (NULL to disable BERT)
+	* @return
+	*   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
+	*/
+#if (UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN)
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenGPTSoVITSV2ProModelFileW", CharSet=CharSet.Unicode)]
+	public static extern int ailiaVoiceOpenGPTSoVITSV2ProModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string ssl, string vits, string sv, string chinese_bert, string vocab);
+#else
+	[DllImport(LIBRARY_NAME, EntryPoint = "ailiaVoiceOpenGPTSoVITSV2ProModelFileA", CharSet=CharSet.Ansi)]
+	public static extern int ailiaVoiceOpenGPTSoVITSV2ProModelFile(IntPtr net, string encoder, string decoder1, string decoder2, string ssl, string vits, string sv, string chinese_bert, string vocab);
+#endif
+
+	/**
+	* \~japanese
+	* @brief GPT-SoVITS v3のCFMサンプリングステップ数を設定します。
+	* @param net ボイスオブジェクトポインタ
+	* @param steps CFMのEuler ODEステップ数(デフォルト4)
+	* @return
+	*   成功した場合は \ref AILIA_STATUS_SUCCESS 、そうでなければエラーコードを返す。
+	*
+	* \~english
+	* @brief Set the number of CFM sampling steps for GPT-SoVITS v3.
+	* @param net A Voice instance pointer
+	* @param steps Number of Euler ODE steps for CFM (default 4)
+	* @return
+	*   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
+	*/
+	[DllImport(LIBRARY_NAME)]
+	public static extern int ailiaVoiceSetSampleSteps(IntPtr net, int steps);
+
+	/**
+	* \~japanese
+	* @brief 音声合成の速度を設定します。
+	* @param net ボイスオブジェクトポインタ
+	* @param speed 速度(デフォルト1.0、0より大きい値)
+	* @return
+	*   成功した場合は \ref AILIA_STATUS_SUCCESS 、そうでなければエラーコードを返す。
+	* @details
+	*   GPT-SoVITS V2およびV3で使用できます。V1では無効です。
+	*
+	* \~english
+	* @brief Set the speech speed for synthesis.
+	* @param net A Voice instance pointer
+	* @param speed Speed value (default 1.0, must be greater than 0)
+	* @return
+	*   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
+	* @details
+	*   Supported by GPT-SoVITS V2 and V3. Not effective for V1.
+	*/
+	[DllImport(LIBRARY_NAME)]
+	public static extern int ailiaVoiceSetSpeed(IntPtr net, float speed);
+
+	/**
+	* \~japanese
+	* @brief G2Pで使用するモデルタイプを設定します。
+	* @param net ボイスオブジェクトポインタ
+	* @param model_type AILIA_VOICE_MODEL_TYPE_*
+	* @return
+	*   成功した場合は \ref AILIA_STATUS_SUCCESS 、そうでなければエラーコードを返す。
+	* @details
+	*   G2Pを単独で使用する際に、モデルファイルを与えずにモデルタイプを設定します。
+	*   ailiaVoiceOpenModelFileAやailiaVoiceOpenGPTSoVITSV3ModelFileAを呼び出した場合は自動的に設定されます。
+	*
+	* \~english
+	* @brief Set the model type for G2P processing.
+	* @param net A Voice instance pointer
+	* @param model_type AILIA_VOICE_MODEL_TYPE_*
+	* @return
+	*   If this function is successful, it returns  \ref AILIA_STATUS_SUCCESS , or an error code otherwise.
+	* @details
+	*   Sets the model type when using G2P standalone without loading model files.
+	*   Automatically set when ailiaVoiceOpenModelFileA or ailiaVoiceOpenGPTSoVITSV3ModelFileA is called.
+	*/
+	[DllImport(LIBRARY_NAME)]
+	public static extern int ailiaVoiceSetModelType(IntPtr net, int model_type);
 
 	/**
 	* \~japanese
